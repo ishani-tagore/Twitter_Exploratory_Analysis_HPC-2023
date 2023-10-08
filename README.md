@@ -86,7 +86,41 @@ being most frequently mentioned would provide insight into whether a tweet refle
 2. Who is retweeting who? Who is the origin of the original content? We will use Pyspark Graphframes to find the nodes
 (original tweeters) and edges (retweeters) for a politicized topic (Black History Courses & critical race theory) and an influencer-driven topic (edtech solutions), and a neutral education topic (pandemic-driven test score declines)
 
-3. What topics are dominating the conversation among verified govt accounts? among other verified accounts? among influencers (non-verified accounts with more than 25K followers)? 
+3. What topics are dominating the conversation among verified govt accounts? among other verified accounts? among influencers (non-verified accounts with more than 25K followers)?
+
+   See <a href="https://docs.google.com/presentation/d/1ndK7mfd4J4IDGlGF304IG1O9RUZf2ADk/edit?usp=sharing&ouid=105860058275521700562&rtpof=true&sd=true">Google Slides for explorations of these questions.</a>
+
+
+## Predicting Whether a Tweet on Twitter will be Retweeted
+The data set represents 100 million tweets called from the Twitter API data set and analyzed previously in Assignment 7 of this class. The data has been cleaned, with a focus on removing bots and fake accounts, keeping English language tweets and removing troublesome null values. This brought us to a subset of ~600K tweets, from which I sought to create a balanced dataset of tweets that were retweeted, and those that were not. I then sampled 10% of the dataset, so we are working with ~60K tweets, or 18 MB of data which can comfortably fit in cache. 
+
+The goal of this exercise is to predict whether a tweet will be retweeted using logistic regression.
+
+## Features engineered
+The three features engineered for this analysis include 1) 'org_type': the type of account 2) 'statuses_count': the number of tweets + retweets made by the user, and 3) the Jaccard distance or 'distCol': a measure of tweet originality. I explain each: 
+
+### 1) Org_ype
+As seen in the chart below, Overall activity differs greatly across the different user groups within the education domain. Educational leaders for example tend to tweet heavily when we look at the overall data, but when looking at a subset of political tweets related to “critical race theory”, politicians and institutions become more vocal.
+
+![image](https://github.com/macs30113-s23/a8-ishani-tagore/blob/b9ce485dcfbe6d23c0c333947bb67aa61a1be069/HPC_A7_pic1.png)
+
+### 2) Statuses_count
+Statuses count represents the total number of tweets and retweets associated with a user, indicating user activity. According to the chart above, the most active users are also the most retweeted. I did not use the top followed users for this purpose since the top followed in the education domain were celebrities from outside education. For example, Michael Bublé has an education foundation, and is in the top 20 followed, but is barely ever retweeted by those within this niche.
+
+### 3) Jac_distance or the Jaccard Distance
+The hypothesis here is that more original tweets are more likely to be retweeted. We used the Jaccard distance measure on hashed tweet text to measure how far apart two tweets are, in other words how unique a tweet is from the rest of the data set. Hashing in this case is used to minimize the size of the big data problem, by comparing A subset of tweets that are likely most likely to be duplicates. we used a Jaccard distance threshold of 0.6. The lower the threshold come on the more Tweets the algorithm will classify as duplicates. Overall it found 4332 duplicates among 30,922 tweets.
+
+![image](https://github.com/macs30113-s23/a8-ishani-tagore/blob/b9ce485dcfbe6d23c0c333947bb67aa61a1be069/HPC_A7_pic2.png)
+
+## Results of a Logistic Regression on the Retweet Encoded Variable
+
+Our predictive accuracy is .673 on the training data and .670 on the testing data, indicating good generalizability of the model to new data, and an accurancy that is better than random chance. There is some predictive power in our variables, but perhaps this could be improved by considering topic and content related attributes of tweets, as opposed to just user-level attributes as we have done in this analysis. 
+
+The FPR of 0.643 for 'original tweets' means that approximately 64.34% of the tweets that were not retweeted are incorrectly classified as retweeted. This indicates a relatively high rate of false positives for the negative class. The FPR of 0.173 for retweeted tweets means that around 17.32% of the retweeted tweets are incorrectly classified as not retweeted. This indicates a lower rate of false positives for the positive class. Overall, the model is more discerning of retweeted tweets than it is of non-retweeted tweets. 
+
+![image](https://github.com/macs30113-s23/a8-ishani-tagore/blob/53a1ae63b5ed824b32e53b5dcb5f72564b6ca5cf/HPC_A7_pic4.png)
+
+
 
  
  
