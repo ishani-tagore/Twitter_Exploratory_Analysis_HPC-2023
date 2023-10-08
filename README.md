@@ -4,6 +4,10 @@ which reflects the emergence of important trends or topics in education. For Ass
 identify relationships and patterns among variables, and understand what types of features drive popularity of a "Twitterer" or Topic in Education. 
 
 In future assignments, we extend this analysis to conduct Topic Modeling on tweets and user descriptions (we have proxied relevant topics with hashtags for this assignment). 
+
+# UPDATE! This respository documents Stage 1 of this analysis. 
+Final results are <a href="[https://www.example.com](https://docs.google.com/presentation/d/1ndK7mfd4J4IDGlGF304IG1O9RUZf2ADk/edit?usp=sharing&ouid=105860058275521700562&rtpof=true&sd=true)">documented in these Google Slides</a>
+
  
 # Discussion on Scalablity Implications: 
 My approach has been to fail fast with code errors on small subsamples of the data, and then gradually scale up my code. 
